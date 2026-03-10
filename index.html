@@ -360,19 +360,10 @@
       <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; white-space: nowrap;">Summer Conference</h3>
       <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
       <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the new economy</p>
-      <iframe name="beehiiv-frame" style="display:none;"></iframe>
-      <form class="email-signup" id="osm-signup" action="https://opensourcemedia.beehiiv.com/create" method="POST" target="beehiiv-frame" style="margin-top: 32px; display: flex; gap: 0; max-width: 100%; width: 100%; box-sizing: border-box;" onsubmit="const btn=this.querySelector('.signup-btn'), inp=this.querySelector('input[type=email]'); btn.textContent='✓'; btn.disabled=true; inp.disabled=true; document.getElementById('signup-thanks').style.display='block';">
-        <input type="email" name="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
-        <input type="hidden" name="utm_source" value="opensourcemedia.xyz">
-        <input type="hidden" name="utm_medium" value="website">
-        <input type="hidden" name="utm_campaign" value="conference-signup">
-        <input type="hidden" name="is_js_enabled" value="true">
-        <input type="hidden" name="sent_from_orchid" value="true">
-        <input type="hidden" name="double_opt" value="false">
-        <input type="hidden" name="fallback_path" value="/">
-        <button type="submit" class="signup-btn" style="padding: 14px 16px; background: var(--white); color: var(--black); border: none; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Be The First To Know</button>
-      </form>
-      <p id="signup-thanks" style="display: none; margin-top: 16px; font-size: 14px; color: var(--white); opacity: 0.8;">Successfully Registered.</p>
+      <div style="margin-top: 32px; max-width: 100%;">
+        <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+        <iframe src="https://subscribe-forms.beehiiv.com/faea863f-b244-4716-95dc-67d5cd24e64b" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="width: 100%; max-width: 560px; height: 291px; margin: 0; border-radius: 0; background-color: transparent; box-shadow: none;"></iframe>
+      </div>
     </div>
   </div>
 </div>
