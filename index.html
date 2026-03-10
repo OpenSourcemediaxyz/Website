@@ -120,7 +120,7 @@
     transition: background-color 0.8s ease, color 0.8s ease;
   }
   .section-wrap {
-    background: var(--black);
+    background: rgba(7, 7, 7, 0.85);
     color: var(--white);
   }
 
@@ -385,9 +385,8 @@ window.addEventListener('scroll', () => {
   // 0 at top, ramps up as you scroll
   scrollSpeed = Math.min(window.scrollY / (vh * 2), 1);
   
-  // Fade canvas gently as you scroll deeper
-  const canvasOpacity = 1 - scrollSpeed * 0.5;
-  container.style.opacity = canvasOpacity;
+  // Keep canvas visible behind all sections
+  container.style.opacity = 1;
 });
 
 // Mouse interaction
