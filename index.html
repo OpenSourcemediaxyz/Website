@@ -360,11 +360,19 @@
       <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; white-space: nowrap;">Summer Conference</h3>
       <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
       <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the new economy</p>
-      <form class="email-signup" id="osm-signup" style="margin-top: 32px; display: flex; gap: 0; max-width: 100%; width: 100%; box-sizing: border-box;" onsubmit="event.preventDefault(); const f=this, btn=f.querySelector('.signup-btn'), inp=f.querySelector('input[type=email]'), email=inp.value; if(!email)return; btn.textContent='Joining...'; btn.disabled=true; fetch('https://opensourcemedia.beehiiv.com/create',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({email:email,utm_source:'opensourcemedia.xyz',utm_medium:'website',utm_campaign:'conference-signup',is_js_enabled:'true',sent_from_orchid:'true',double_opt:'false',fallback_path:'/'}).toString()}).then(r=>{btn.textContent='✓'; inp.disabled=true; document.getElementById('signup-thanks').style.display='block';}).catch(e=>{btn.textContent='✓'; inp.disabled=true; document.getElementById('signup-thanks').style.display='block';});">
-        <input type="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
+      <iframe name="beehiiv-frame" style="display:none;"></iframe>
+      <form class="email-signup" id="osm-signup" action="https://opensourcemedia.beehiiv.com/create" method="POST" target="beehiiv-frame" style="margin-top: 32px; display: flex; gap: 0; max-width: 100%; width: 100%; box-sizing: border-box;" onsubmit="const btn=this.querySelector('.signup-btn'), inp=this.querySelector('input[type=email]'); btn.textContent='✓'; btn.disabled=true; inp.disabled=true; document.getElementById('signup-thanks').style.display='block';">
+        <input type="email" name="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
+        <input type="hidden" name="utm_source" value="opensourcemedia.xyz">
+        <input type="hidden" name="utm_medium" value="website">
+        <input type="hidden" name="utm_campaign" value="conference-signup">
+        <input type="hidden" name="is_js_enabled" value="true">
+        <input type="hidden" name="sent_from_orchid" value="true">
+        <input type="hidden" name="double_opt" value="false">
+        <input type="hidden" name="fallback_path" value="/">
         <button type="submit" class="signup-btn" style="padding: 14px 16px; background: var(--white); color: var(--black); border: none; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Be The First To Know</button>
       </form>
-      <p id="signup-thanks" style="display: none; margin-top: 16px; font-size: 14px; color: var(--white); opacity: 0.8;">Successfully Registered. Thank You</p>
+      <p id="signup-thanks" style="display: none; margin-top: 16px; font-size: 14px; color: var(--white); opacity: 0.8;">Successfully Registered.</p>
     </div>
   </div>
 </div>
