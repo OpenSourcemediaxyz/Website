@@ -173,7 +173,7 @@
 <body>
 
 <nav>
-  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="osm-logo-horizontal.png" alt="OpenSource Media" style="height: 28px; filter: brightness(10);"></a>
+  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--white);"><span style="font-size:16px;font-weight:700;letter-spacing:0.04em;text-transform:lowercase;">open source media</span><img src="osm-icon.png" alt="OSM" style="height: 20px; filter: brightness(10);"></a>
   <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open');this.textContent=this.textContent==='☰'?'✕':'☰';" aria-label="Menu">☰</button>
   <div class="nav-links">
     <a href="#podcast" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Podcast</a>
