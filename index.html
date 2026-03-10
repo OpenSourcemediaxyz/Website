@@ -360,8 +360,11 @@
       <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; white-space: nowrap;">Summer Conference</h3>
       <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
       <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the new economy</p>
-      <form class="email-signup" style="margin-top: 32px; display: flex; gap: 0; max-width: 100%; width: 100%; box-sizing: border-box;" onsubmit="event.preventDefault(); const e=this.querySelector('input'); if(e.value){this.querySelector('.signup-btn').textContent='✓'; e.disabled=true; localStorage.setItem('osm_email',e.value);}">
-        <input type="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
+      <form class="email-signup" style="margin-top: 32px; display: flex; gap: 0; max-width: 100%; width: 100%; box-sizing: border-box;" action="https://opensourcemedia.beehiiv.com/subscribe" method="POST" onsubmit="const btn=this.querySelector('.signup-btn'); btn.textContent='Joining...'; btn.disabled=true;">
+        <input type="email" name="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
+        <input type="hidden" name="utm_source" value="opensourcemedia.xyz">
+        <input type="hidden" name="utm_medium" value="website">
+        <input type="hidden" name="utm_campaign" value="conference-signup">
         <button type="submit" class="signup-btn" style="padding: 14px 16px; background: var(--white); color: var(--black); border: none; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Be The First To Know</button>
       </form>
     </div>
