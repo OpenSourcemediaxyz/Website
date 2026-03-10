@@ -119,28 +119,10 @@
     z-index: 10;
     transition: background-color 0.8s ease, color 0.8s ease;
   }
-  .section-wrap[data-theme="dark"] {
+  .section-wrap {
     background: var(--black);
     color: var(--white);
   }
-  .section-wrap[data-theme="light"] {
-    background: var(--white);
-    color: var(--black);
-  }
-  .section-wrap[data-theme="light"] .section-label { color: #666; }
-  .section-wrap[data-theme="light"] .desc { color: #666 !important; }
-  .section-wrap[data-theme="light"] .show-detail p { color: #666; }
-  .section-wrap[data-theme="light"] .conf-date { color: #666; }
-  .section-wrap[data-theme="light"] .conf-desc { color: #666; }
-  .section-wrap[data-theme="light"] .conf-tag { border-color: #ccc; color: #666; }
-  .section-wrap[data-theme="light"] .builder-item { background: var(--white); color: #999; }
-  .section-wrap[data-theme="light"] .builder-item:hover { color: var(--black); }
-  .section-wrap[data-theme="light"] .builder-grid { background: #e0e0e0; }
-  .section-wrap[data-theme="light"] .btn-primary { background: var(--black); color: var(--white); }
-  .section-wrap[data-theme="light"] .btn-secondary { color: var(--black); border-color: #ccc; }
-  .section-wrap[data-theme="light"] footer span { color: #666; }
-  .section-wrap[data-theme="light"] footer .socials a { color: #666; }
-  .section-wrap[data-theme="light"] footer .socials a:hover { color: var(--black); }
 
   /* SHOW */
   #show h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
@@ -249,7 +231,7 @@
 </div>
 
 <!-- LIGHT section: podcast -->
-<div class="section-wrap" data-theme="light">
+<div class="section-wrap" data-theme="dark">
   <div class="page-section reveal" id="show">
     <p class="section-label">The Podcast</p>
     <h2>Builders of the<br>Open Economy</h2>
@@ -283,7 +265,7 @@
 </div>
 
 <!-- LIGHT section: builders -->
-<div class="section-wrap" data-theme="light">
+<div class="section-wrap" data-theme="dark">
   <div class="page-section reveal" id="builders">
     <p class="section-label">Builder Network</p>
     <h2>Featuring builders from<br>across the open economy</h2>
@@ -395,17 +377,16 @@ const baseScale = isMobile ? 0.5 : 0.85;
 mesh.scale.set(baseScale, baseScale, baseScale);
 scene.add(mesh);
 
-// Scroll tracking
-let scrollProgress = 0;
-let explosionAmount = 0;
+// Scroll tracking — drives rotation speed
+let scrollSpeed = 0;
 
 window.addEventListener('scroll', () => {
   const vh = window.innerHeight;
-  // Explosion starts after hero, completes within 1.5 viewports
-  scrollProgress = Math.min(Math.max((window.scrollY - vh * 0.3) / (vh * 1.2), 0), 1);
+  // 0 at top, ramps up as you scroll
+  scrollSpeed = Math.min(window.scrollY / (vh * 2), 1);
   
-  // Fade canvas as explosion completes
-  const canvasOpacity = 1 - scrollProgress * 0.7;
+  // Fade canvas gently as you scroll deeper
+  const canvasOpacity = 1 - scrollSpeed * 0.5;
   container.style.opacity = canvasOpacity;
 });
 
@@ -420,33 +401,8 @@ document.addEventListener('mousemove', (e) => {
 function animate() {
   requestAnimationFrame(animate);
 
-  // Smooth explosion interpolation
-  explosionAmount += (scrollProgress - explosionAmount) * 0.08;
-
-  // Apply vertex displacement (explosion)
-  const positions = posAttr.array;
-  const explodeStrength = explosionAmount * 3.5;
-  
-  for (let i = 0; i < positions.length; i += 3) {
-    const ox = origPositions[i];
-    const oy = origPositions[i+1];
-    const oz = origPositions[i+2];
-    const nx = origNormals[i];
-    const ny = origNormals[i+1];
-    const nz = origNormals[i+2];
-    
-    // Add some noise-like variation based on vertex position
-    const noise = Math.sin(ox * 5 + oy * 3) * 0.3 + Math.cos(oz * 4 + ox * 2) * 0.3;
-    const vertexExplosion = explodeStrength * (1 + noise);
-    
-    positions[i]   = ox + nx * vertexExplosion;
-    positions[i+1] = oy + ny * vertexExplosion;
-    positions[i+2] = oz + nz * vertexExplosion;
-  }
-  posAttr.needsUpdate = true;
-
-  // Rotation — faster as explosion increases
-  const rotSpeed = 0.0002 + explosionAmount * 0.001;
+  // Rotation — speeds up with scroll
+  const rotSpeed = 0.0002 + scrollSpeed * 0.003;
   mesh.rotation.x += (mouseY * 0.3 - mesh.rotation.x) * 0.02;
   mesh.rotation.y = performance.now() * rotSpeed + mouseX * 0.3;
 
