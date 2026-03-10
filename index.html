@@ -32,7 +32,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    z-index: 200;
     mix-blend-mode: difference;
   }
   .logo { font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -146,11 +146,25 @@
   .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* MOBILE NAV */
+  .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 24px; cursor: pointer; z-index: 101; }
+  .nav-links.open { display: flex !important; }
+
   @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    section { padding: 80px 24px; }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(7,7,7,0.95); flex-direction: column; justify-content: center; align-items: center; gap: 32px; z-index: 100; }
+    .nav-links a { font-size: 20px; margin-left: 0; }
+    .hamburger { display: block; z-index: 101; }
+    section { padding: 80px 20px; }
+    #canvas-container { opacity: 0.7; top: 30%; height: 70%; }
+    .hero-content { padding-top: 80px; }
+    .hero-content h1 { font-size: 36px; }
+    .hero-tagline { font-size: 14px; padding: 0 16px; }
     .show-details { flex-direction: column; gap: 24px; }
     .builder-grid { grid-template-columns: repeat(2, 1fr); }
+    #conference h2 { font-size: 28px; }
+    #cta h2 { font-size: 28px; }
+    .btn-primary, .btn-secondary { padding: 12px 24px; font-size: 13px; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
     footer .socials a { margin: 0 12px; }
   }
@@ -160,10 +174,11 @@
 
 <nav>
   <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="osm-logo-horizontal.png" alt="OpenSource Media" style="height: 28px; filter: brightness(10);"></a>
+  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open');this.textContent=this.textContent==='☰'?'✕':'☰';" aria-label="Menu">☰</button>
   <div class="nav-links">
-    <a href="#podcast">Podcast</a>
-    <a href="#conference">Conference</a>
-    <a href="#builders">Builders</a>
+    <a href="#podcast" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Podcast</a>
+    <a href="#conference" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Conference</a>
+    <a href="#builders" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Builders</a>
     <a href="https://x.com/opensourcexyz" target="_blank">𝕏</a>
   </div>
 </nav>
@@ -332,7 +347,8 @@ const material = new THREE.MeshPhysicalMaterial({
   reflectivity: 1.0,
 });
 
-// Torus knot sculpture — thinner tubes
+// Torus knot sculpture — thinner tubes, smaller on mobile
+const isMobile = window.innerWidth < 768;
 const geometry = new THREE.TorusKnotGeometry(1.2, 0.22, 256, 64, 2, 3);
 
 // Store original positions for displacement
@@ -340,7 +356,8 @@ const posAttr = geometry.getAttribute('position');
 const origPositions = new Float32Array(posAttr.array);
 
 const mesh = new THREE.Mesh(geometry, material);
-mesh.scale.set(0.85, 0.85, 0.85);
+const s = isMobile ? 0.5 : 0.85;
+mesh.scale.set(s, s, s);
 scene.add(mesh);
 
 // Mouse interaction
@@ -380,7 +397,7 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.02 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
