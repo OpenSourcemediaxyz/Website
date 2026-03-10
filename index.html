@@ -398,8 +398,9 @@ window.addEventListener('scroll', () => {
   const totalHeight = document.documentElement.scrollHeight - vh;
   scrollSpeed = Math.min(window.scrollY / totalHeight, 1);
   
-  // Keep canvas visible behind all sections
-  container.style.opacity = 1;
+  // Dim canvas as you scroll past hero
+  const dimOpacity = Math.max(1 - (window.scrollY / vh) * 0.6, 0.25);
+  container.style.opacity = dimOpacity;
 });
 
 // Mouse interaction
@@ -413,8 +414,8 @@ document.addEventListener('mousemove', (e) => {
 function animate() {
   requestAnimationFrame(animate);
 
-  // Rotation — speeds up with scroll
-  const rotSpeed = 0.0002 + scrollSpeed * 0.003;
+  // Rotation — constant gentle speed, no scroll acceleration
+  const rotSpeed = 0.0002;
   mesh.rotation.x += (mouseY * 0.3 - mesh.rotation.x) * 0.02;
   mesh.rotation.y = performance.now() * rotSpeed + mouseX * 0.3;
 
