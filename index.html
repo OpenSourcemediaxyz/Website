@@ -150,11 +150,10 @@
     z-index: 10;
   }
   .hero-content { position: relative; z-index: 10; pointer-events: none; }
-  .primary-logo { display: flex; flex-direction: column; align-items: center; }
-  /* Icon = ~25% of total logo height, text dominates */
-  .hero-icon { height: clamp(30px, 4vw, 45px); margin-bottom: 14px; }
+  .horizontal-logo { display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2vw, 24px); white-space: nowrap; }
+  .hero-icon-h { height: clamp(32px, 5vw, 55px); }
   .hero-content h1 {
-    font-size: clamp(56px, 12vw, 140px);
+    font-size: clamp(42px, 7vw, 90px);
     font-weight: 700;
     line-height: 1.0;
     letter-spacing: -0.03em;
@@ -163,9 +162,6 @@
     text-transform: lowercase;
   }
   .hero-content h1 span { display: block; }
-  .hero-content h1 .logo-open { text-align: left; padding-left: 0; }
-  .hero-content h1 .logo-source { text-align: center; padding-left: 10%; }
-  .hero-content h1 .logo-media { text-align: right; padding-left: 20%; }
   .hero-tagline {
     font-size: clamp(18px, 2.5vw, 28px);
     color: var(--white);
@@ -299,9 +295,9 @@
 
 <section id="hero">
   <div class="hero-content">
-    <div class="primary-logo">
-      <img src="osm-icon.png" alt="OSM" class="hero-icon" style="filter: brightness(10);">
-      <h1><span class="logo-open">open</span><span class="logo-source">source</span><span class="logo-media">media</span></h1>
+    <div class="horizontal-logo">
+      <h1>open source media</h1>
+      <img src="osm-icon.png" alt="OSM" class="hero-icon-h" style="filter: brightness(10);">
     </div>
     <p class="hero-tagline">Townsquare For The New Economy</p>
     <div class="hero-ctas">
