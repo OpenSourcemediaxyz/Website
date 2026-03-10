@@ -14,6 +14,8 @@
     --white: #FFFFFF;
     --gray: #999CA5;
     --gray-dark: #2a2a2e;
+    --bg: #070707;
+    --fg: #FFFFFF;
   }
 
   body {
@@ -39,6 +41,17 @@
   .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; margin-left: 32px; transition: color 0.3s; }
   .nav-links a:hover { color: var(--white); }
 
+  /* CANVAS — Fixed, stays on screen */
+  #canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    transition: opacity 0.6s ease;
+  }
+
   /* HERO */
   #hero {
     height: 100vh;
@@ -48,8 +61,8 @@
     align-items: center;
     position: relative;
     text-align: center;
+    z-index: 10;
   }
-  #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
   .hero-content { position: relative; z-index: 10; pointer-events: none; }
   .primary-logo { display: flex; flex-direction: column; align-items: center; }
   .hero-icon { height: clamp(28px, 5vw, 50px); margin-bottom: 12px; }
@@ -90,23 +103,58 @@
   .btn-secondary:hover { border-color: var(--white); }
 
   /* SECTIONS */
-  section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
-  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray); margin-bottom: 24px; }
+  .page-section {
+    position: relative;
+    z-index: 10;
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    transition: color 0.6s ease;
+  }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 24px; opacity: 0.5; }
+
+  /* SECTION WRAPPERS — for full-width backgrounds */
+  .section-wrap {
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.8s ease, color 0.8s ease;
+  }
+  .section-wrap[data-theme="dark"] {
+    background: var(--black);
+    color: var(--white);
+  }
+  .section-wrap[data-theme="light"] {
+    background: var(--white);
+    color: var(--black);
+  }
+  .section-wrap[data-theme="light"] .section-label { color: #666; }
+  .section-wrap[data-theme="light"] .desc { color: #666 !important; }
+  .section-wrap[data-theme="light"] .show-detail p { color: #666; }
+  .section-wrap[data-theme="light"] .conf-date { color: #666; }
+  .section-wrap[data-theme="light"] .conf-desc { color: #666; }
+  .section-wrap[data-theme="light"] .conf-tag { border-color: #ccc; color: #666; }
+  .section-wrap[data-theme="light"] .builder-item { background: var(--white); color: #999; }
+  .section-wrap[data-theme="light"] .builder-item:hover { color: var(--black); }
+  .section-wrap[data-theme="light"] .builder-grid { background: #e0e0e0; }
+  .section-wrap[data-theme="light"] .btn-primary { background: var(--black); color: var(--white); }
+  .section-wrap[data-theme="light"] .btn-secondary { color: var(--black); border-color: #ccc; }
+  .section-wrap[data-theme="light"] footer span { color: #666; }
+  .section-wrap[data-theme="light"] footer .socials a { color: #666; }
+  .section-wrap[data-theme="light"] footer .socials a:hover { color: var(--black); }
 
   /* SHOW */
-  #show { border-top: 1px solid var(--gray-dark); }
   #show h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
-  #show p.desc { font-size: 18px; color: var(--gray); line-height: 1.6; max-width: 600px; }
+  #show .desc { font-size: 18px; color: var(--gray); line-height: 1.6; max-width: 600px; }
   .show-details { display: flex; gap: 48px; margin-top: 48px; }
   .show-detail { flex: 1; }
   .show-detail h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
   .show-detail p { font-size: 15px; color: var(--gray); line-height: 1.5; }
 
   /* CONFERENCE */
-  #conference { border-top: 1px solid var(--gray-dark); text-align: center; }
+  #conference { text-align: center; }
   #conference h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
-  #conference .conf-date { font-size: 20px; color: var(--gray); margin-bottom: 12px; }
-  #conference .conf-desc { font-size: 16px; color: var(--gray); line-height: 1.6; max-width: 600px; margin: 0 auto; }
+  .conf-date { font-size: 20px; color: var(--gray); margin-bottom: 12px; }
+  .conf-desc { font-size: 16px; color: var(--gray); line-height: 1.6; max-width: 600px; margin: 0 auto; }
   .conf-tag {
     display: inline-block; margin-top: 32px;
     border: 1px solid var(--gray-dark); padding: 10px 24px;
@@ -114,7 +162,6 @@
   }
 
   /* BUILDERS */
-  #builders { border-top: 1px solid var(--gray-dark); }
   #builders h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; margin-bottom: 8px; }
   .builder-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -122,24 +169,24 @@
   }
   .builder-item {
     background: var(--black); padding: 32px 24px; text-align: center;
-    font-size: 16px; font-weight: 400; color: var(--gray); transition: color 0.3s;
+    font-size: 16px; font-weight: 400; color: var(--gray); transition: color 0.3s, background 0.6s;
   }
   .builder-item:hover { color: var(--white); }
 
   /* THESIS */
-  #thesis { border-top: 1px solid var(--gray-dark); text-align: center; }
+  #thesis { text-align: center; }
   #thesis blockquote {
     font-size: clamp(22px, 3vw, 36px); font-weight: 300; line-height: 1.4;
-    max-width: 800px; margin: 0 auto; color: var(--white);
+    max-width: 800px; margin: 0 auto;
   }
 
   /* CTA */
-  #cta { border-top: 1px solid var(--gray-dark); text-align: center; padding: 160px 48px; }
+  #cta { text-align: center; padding: 160px 48px; }
   #cta h2 { font-size: clamp(32px, 5vw, 64px); font-weight: 700; margin-bottom: 32px; }
 
   /* FOOTER */
   footer {
-    border-top: 1px solid var(--gray-dark); padding: 48px;
+    padding: 48px;
     display: flex; justify-content: space-between; align-items: center;
     max-width: 1200px; margin: 0 auto;
   }
@@ -152,16 +199,9 @@
   .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* MOBILE NAV */
-  .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 24px; cursor: pointer; z-index: 101; }
-  .nav-links.open { display: flex !important; }
-
   @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
     nav { display: none; }
-    .hamburger { display: none; }
-    section { padding: 80px 20px; }
-    #canvas-container { opacity: 0.7; top: 30%; height: 70%; }
+    .page-section { padding: 80px 20px; }
     .hero-content { padding-top: 0; margin-top: -60px; }
     .hero-content h1 { font-size: 36px; }
     .hero-tagline { font-size: 14px; padding: 0 16px; }
@@ -171,25 +211,24 @@
     #cta h2 { font-size: 28px; }
     .btn-primary, .btn-secondary { padding: 12px 24px; font-size: 13px; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
-    footer .socials a { margin: 0 12px; }
   }
 </style>
 </head>
 <body>
 
+<div id="canvas-container"></div>
+
 <nav>
   <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--white);"><span style="font-size:16px;font-weight:700;letter-spacing:0.04em;text-transform:lowercase;">open source media</span><img src="osm-icon.png" alt="OSM" style="height: 20px; filter: brightness(10);"></a>
-  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open');this.textContent=this.textContent==='☰'?'✕':'☰';" aria-label="Menu">☰</button>
   <div class="nav-links">
-    <a href="#podcast" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Podcast</a>
-    <a href="#conference" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Conference</a>
-    <a href="#builders" onclick="document.querySelector('.nav-links').classList.remove('open');document.querySelector('.hamburger').textContent='☰';">Builders</a>
+    <a href="#show">Podcast</a>
+    <a href="#conference">Conference</a>
+    <a href="#builders">Builders</a>
     <a href="https://x.com/opensourcexyz" target="_blank">𝕏</a>
   </div>
 </nav>
 
 <section id="hero">
-  <div id="canvas-container"></div>
   <div class="hero-content">
     <div class="primary-logo">
       <img src="osm-icon.png" alt="OSM" class="hero-icon" style="filter: brightness(10);">
@@ -202,70 +241,84 @@
   </div>
 </section>
 
-<section id="thesis" class="reveal" style="border-top: none; padding-bottom: 0;">
-  <blockquote>The open economy is being built in real time. We connect the builders, ideas, and systems shaping it</blockquote>
-</section>
+<!-- DARK section: thesis -->
+<div class="section-wrap" data-theme="dark">
+  <div class="page-section reveal" id="thesis">
+    <blockquote>The open economy is being built in real time. We connect the builders, ideas, and systems shaping it</blockquote>
+  </div>
+</div>
 
-<section id="podcast" class="reveal">
-  <p class="section-label">The Podcast</p>
-  <h2>Builders of the<br>Open Economy</h2>
-  <p class="desc">A weekly live forum where founders, researchers, and operators debate the ideas shaping AI, crypto, and open systems</p>
-  <div class="show-details">
-    <div class="show-detail">
-      <h3>Format</h3>
-      <p>60 minutes<br>3–4 builders<br>Live streamed on X</p>
+<!-- LIGHT section: podcast -->
+<div class="section-wrap" data-theme="light">
+  <div class="page-section reveal" id="show">
+    <p class="section-label">The Podcast</p>
+    <h2>Builders of the<br>Open Economy</h2>
+    <p class="desc">A weekly live forum where founders, researchers, and operators debate the ideas shaping AI, crypto, and open systems</p>
+    <div class="show-details">
+      <div class="show-detail">
+        <h3>Format</h3>
+        <p>60 minutes<br>3–4 builders<br>Live streamed on X</p>
+      </div>
+      <div class="show-detail">
+        <h3>Topics</h3>
+        <p>DeFi infrastructure, AI agents, tokenized economies, open-source protocols, builder culture</p>
+      </div>
+      <div class="show-detail">
+        <h3>Schedule</h3>
+        <p>Weekly</p>
+      </div>
     </div>
-    <div class="show-detail">
-      <h3>Topics</h3>
-      <p>DeFi infrastructure, AI agents, tokenized economies, open-source protocols, builder culture</p>
+  </div>
+</div>
+
+<!-- DARK section: conference -->
+<div class="section-wrap" data-theme="dark">
+  <div class="page-section reveal" id="conference">
+    <p class="section-label">Summer 2026</p>
+    <h2>OSM Virtual Conference</h2>
+    <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
+    <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the open economy</p>
+    <span class="conf-tag">Details coming soon</span>
+  </div>
+</div>
+
+<!-- LIGHT section: builders -->
+<div class="section-wrap" data-theme="light">
+  <div class="page-section reveal" id="builders">
+    <p class="section-label">Builder Network</p>
+    <h2>Featuring builders from<br>across the open economy</h2>
+    <div class="builder-grid">
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
+      <div class="builder-item">Coming Soon</div>
     </div>
-    <div class="show-detail">
-      <h3>Schedule</h3>
-      <p>Weekly</p>
+  </div>
+</div>
+
+<!-- DARK section: CTA + footer -->
+<div class="section-wrap" data-theme="dark">
+  <div class="page-section reveal" id="cta">
+    <h2>Follow the signal.</h2>
+    <div class="hero-ctas">
+      <a href="https://x.com/opensourcexyz" class="btn-primary" target="_blank">Follow on 𝕏</a>
+      <a href="mailto:jc@opensourcemedia.xyz" class="btn-secondary">Sponsor Inquiry</a>
     </div>
   </div>
-</section>
+  <footer>
+    <span>© 2026 OpenSource Media</span>
+    <div class="socials">
+      <a href="https://x.com/opensourcexyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.youtube.com/@opensourcemediaxyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="24" height="17" viewBox="0 0 24 17" fill="currentColor"><path d="M23.5 2.5C23.2 1.4 22.3.5 21.2.2 19.3 0 12 0 12 0S4.7 0 2.8.2C1.7.5.8 1.4.5 2.5.2 4.4 0 8.5 0 8.5s.2 4.1.5 6c.3 1.1 1.2 2 2.3 2.3C4.7 17 12 17 12 17s7.3 0 9.2-.2c1.1-.3 2-1.2 2.3-2.3.3-1.9.5-6 .5-6s-.2-4.1-.5-6zM9.6 12.1V4.9l6.2 3.6-6.2 3.6z"/></svg></a>
+    </div>
+  </footer>
+</div>
 
-<section id="conference" class="reveal">
-  <p class="section-label">Summer 2026</p>
-  <h2>OSM Virtual Conference</h2>
-  <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
-  <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the open economy</p>
-  <span class="conf-tag">Details coming soon</span>
-</section>
-
-<section id="builders" class="reveal">
-  <p class="section-label">Builder Network</p>
-  <h2>Featuring builders from<br>across the open economy</h2>
-  <div class="builder-grid">
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-    <div class="builder-item">Coming Soon</div>
-  </div>
-</section>
-
-<section id="cta" class="reveal">
-  <h2>Follow the signal.</h2>
-  <div class="hero-ctas">
-    <a href="https://x.com/opensourcexyz" class="btn-primary" target="_blank">Follow on 𝕏</a>
-    <a href="mailto:jc@opensourcemedia.xyz" class="btn-secondary">Sponsor Inquiry</a>
-  </div>
-</section>
-
-<footer>
-  <span>© 2026 OpenSource Media</span>
-  <div class="socials">
-    <a href="https://x.com/opensourcexyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-    <a href="https://www.youtube.com/@opensourcemediaxyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="24" height="17" viewBox="0 0 24 17" fill="currentColor"><path d="M23.5 2.5C23.2 1.4 22.3.5 21.2.2 19.3 0 12 0 12 0S4.7 0 2.8.2C1.7.5.8 1.4.5 2.5.2 4.4 0 8.5 0 8.5s.2 4.1.5 6c.3 1.1 1.2 2 2.3 2.3C4.7 17 12 17 12 17s7.3 0 9.2-.2c1.1-.3 2-1.2 2.3-2.3.3-1.9.5-6 .5-6s-.2-4.1-.5-6zM9.6 12.1V4.9l6.2 3.6-6.2 3.6z"/></svg></a>
-  </div>
-</footer>
-
-<!-- Three.js Chrome Sculpture — Studio HDRI Style -->
+<!-- Three.js Chrome Sculpture with Scroll Explosion -->
 <script type="importmap">
 {
   "imports": {
@@ -276,11 +329,11 @@
 </script>
 <script type="module">
 import * as THREE from 'three';
-import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x070707);
+const bgColor = new THREE.Color(0x070707);
+scene.background = bgColor;
 
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.z = 5;
@@ -293,83 +346,71 @@ renderer.toneMappingExposure = 1.0;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 container.appendChild(renderer.domElement);
 
-// Create custom studio environment
+// Studio environment
 const pmrem = new THREE.PMREMGenerator(renderer);
-
-// Build a dark studio scene with bright panels for reflections
 const studioScene = new THREE.Scene();
 studioScene.background = new THREE.Color(0x000000);
 
-// Key light panel (upper-left) — larger and brighter
-const keyGeo = new THREE.PlaneGeometry(6, 3);
-const keyMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-const keyLight = new THREE.Mesh(keyGeo, keyMat);
-keyLight.position.set(-3, 4, 3);
-keyLight.lookAt(0, 0, 0);
-studioScene.add(keyLight);
-
-// Fill light panel (right, brighter)
-const fillGeo = new THREE.PlaneGeometry(5, 3);
-const fillMat = new THREE.MeshBasicMaterial({ color: 0xcccccc, side: THREE.DoubleSide });
-const fillLight = new THREE.Mesh(fillGeo, fillMat);
-fillLight.position.set(4, 1, 2);
-fillLight.lookAt(0, 0, 0);
-studioScene.add(fillLight);
-
-// Bottom bounce — brighter for more silver
-const bounceGeo = new THREE.PlaneGeometry(8, 4);
-const bounceMat = new THREE.MeshBasicMaterial({ color: 0x555555, side: THREE.DoubleSide });
-const bounceLight = new THREE.Mesh(bounceGeo, bounceMat);
-bounceLight.position.set(0, -3, 1);
-bounceLight.lookAt(0, 0, 0);
-studioScene.add(bounceLight);
-
-// Rim accent (back)
-const rimGeo = new THREE.PlaneGeometry(3, 2);
-const rimMat = new THREE.MeshBasicMaterial({ color: 0xeeeeee, side: THREE.DoubleSide });
-const rimLight = new THREE.Mesh(rimGeo, rimMat);
-rimLight.position.set(-1, 2, -4);
-rimLight.lookAt(0, 0, 0);
-studioScene.add(rimLight);
-
-// Top fill for overall brightness
-const topGeo = new THREE.PlaneGeometry(6, 4);
-const topMat = new THREE.MeshBasicMaterial({ color: 0x999999, side: THREE.DoubleSide });
-const topLight = new THREE.Mesh(topGeo, topMat);
-topLight.position.set(0, 5, 0);
-topLight.lookAt(0, 0, 0);
-studioScene.add(topLight);
+const panels = [
+  { size: [6,3], color: 0xffffff, pos: [-3,4,3] },
+  { size: [5,3], color: 0xcccccc, pos: [4,1,2] },
+  { size: [8,4], color: 0x555555, pos: [0,-3,1] },
+  { size: [3,2], color: 0xeeeeee, pos: [-1,2,-4] },
+  { size: [6,4], color: 0x999999, pos: [0,5,0] },
+];
+panels.forEach(p => {
+  const g = new THREE.PlaneGeometry(...p.size);
+  const m = new THREE.MeshBasicMaterial({ color: p.color, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.position.set(...p.pos);
+  mesh.lookAt(0,0,0);
+  studioScene.add(mesh);
+});
 
 const envMap = pmrem.fromScene(studioScene, 0.04).texture;
 scene.environment = envMap;
 
-// Chrome material — bright silver/gray, mirror-like
+// Chrome material
 const material = new THREE.MeshPhysicalMaterial({
   color: 0xffffff,
   metalness: 1.0,
   roughness: 0.03,
   envMap: envMap,
   envMapIntensity: 2.0,
-  clearcoat: 0.0,
   reflectivity: 1.0,
 });
 
-// Torus knot sculpture — thinner tubes, smaller on mobile
+// Torus knot
 const isMobile = window.innerWidth < 768;
 const geometry = new THREE.TorusKnotGeometry(1.2, 0.22, 256, 64, 2, 3);
 
-// Store original positions for displacement
+// Store original positions + compute normals for explosion
 const posAttr = geometry.getAttribute('position');
+const normalAttr = geometry.getAttribute('normal');
 const origPositions = new Float32Array(posAttr.array);
+const origNormals = new Float32Array(normalAttr.array);
 
 const mesh = new THREE.Mesh(geometry, material);
-const s = isMobile ? 0.5 : 0.85;
-mesh.scale.set(s, s, s);
+const baseScale = isMobile ? 0.5 : 0.85;
+mesh.scale.set(baseScale, baseScale, baseScale);
 scene.add(mesh);
+
+// Scroll tracking
+let scrollProgress = 0;
+let explosionAmount = 0;
+
+window.addEventListener('scroll', () => {
+  const vh = window.innerHeight;
+  // Explosion starts after hero, completes within 1.5 viewports
+  scrollProgress = Math.min(Math.max((window.scrollY - vh * 0.3) / (vh * 1.2), 0), 1);
+  
+  // Fade canvas as explosion completes
+  const canvasOpacity = 1 - scrollProgress * 0.7;
+  container.style.opacity = canvasOpacity;
+});
 
 // Mouse interaction
 let mouseX = 0, mouseY = 0;
-let targetRotX = 0, targetRotY = 0;
 document.addEventListener('mousemove', (e) => {
   mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
   mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -379,14 +420,35 @@ document.addEventListener('mousemove', (e) => {
 function animate() {
   requestAnimationFrame(animate);
 
-  // Slow base rotation
-  targetRotX = mouseY * 0.3;
-  targetRotY = performance.now() * 0.0002 + mouseX * 0.3;
+  // Smooth explosion interpolation
+  explosionAmount += (scrollProgress - explosionAmount) * 0.08;
 
-  mesh.rotation.x += (targetRotX - mesh.rotation.x) * 0.02;
-  mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.02;
+  // Apply vertex displacement (explosion)
+  const positions = posAttr.array;
+  const explodeStrength = explosionAmount * 3.5;
+  
+  for (let i = 0; i < positions.length; i += 3) {
+    const ox = origPositions[i];
+    const oy = origPositions[i+1];
+    const oz = origPositions[i+2];
+    const nx = origNormals[i];
+    const ny = origNormals[i+1];
+    const nz = origNormals[i+2];
+    
+    // Add some noise-like variation based on vertex position
+    const noise = Math.sin(ox * 5 + oy * 3) * 0.3 + Math.cos(oz * 4 + ox * 2) * 0.3;
+    const vertexExplosion = explodeStrength * (1 + noise);
+    
+    positions[i]   = ox + nx * vertexExplosion;
+    positions[i+1] = oy + ny * vertexExplosion;
+    positions[i+2] = oz + nz * vertexExplosion;
+  }
+  posAttr.needsUpdate = true;
 
-
+  // Rotation — faster as explosion increases
+  const rotSpeed = 0.0002 + explosionAmount * 0.001;
+  mesh.rotation.x += (mouseY * 0.3 - mesh.rotation.x) * 0.02;
+  mesh.rotation.y = performance.now() * rotSpeed + mouseX * 0.3;
 
   renderer.render(scene, camera);
 }
