@@ -361,7 +361,10 @@
       <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">Next Up · Summer Conference</h3>
       <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
       <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the new economy</p>
-      <a href="https://opensourcemedia.beehiiv.com/subscribe" target="_blank" class="btn-primary" style="margin-top: 32px; display: inline-block;">Be the first to know</a>
+      <form class="email-signup" style="margin-top: 32px; display: flex; gap: 0; max-width: 440px;" onsubmit="event.preventDefault(); const e=this.querySelector('input'); if(e.value){this.querySelector('.signup-btn').textContent='✓'; e.disabled=true; localStorage.setItem('osm_email',e.value);}">
+        <input type="email" placeholder="Your email" required style="flex: 1; padding: 14px 16px; background: transparent; border: 1px solid var(--gray-dark); border-right: none; color: var(--white); font-family: inherit; font-size: 14px; outline: none;">
+        <button type="submit" class="signup-btn" style="padding: 14px 24px; background: var(--white); color: var(--black); border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;">Be the first to know</button>
+      </form>
     </div>
   </div>
 </div>
