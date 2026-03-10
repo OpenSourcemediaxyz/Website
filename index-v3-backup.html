@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenSource Media</title>
+<style>
+  @import url('https://db.onlinewebfonts.com/c/29ddb4605533a38e086b48fa105e0d12?family=Nohemi');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #070707;
+    --white: #FFFFFF;
+    --gray: #999CA5;
+    --gray-dark: #2a2a2e;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Nohemi', 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+  }
+  .logo { font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; margin-left: 32px; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--white); }
+
+  /* HERO */
+  #hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+  }
+  #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+  .hero-content { position: relative; z-index: 10; pointer-events: none; }
+  .hero-content h1 {
+    font-size: clamp(40px, 7vw, 90px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    text-shadow: 0 0 60px rgba(0,0,0,0.8);
+  }
+  .hero-content h1 span { display: block; }
+  .hero-tagline {
+    font-size: clamp(14px, 1.8vw, 20px);
+    color: var(--gray);
+    font-weight: 300;
+    margin-bottom: 40px;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 40px rgba(0,0,0,0.9);
+  }
+  .hero-ctas { display: flex; gap: 16px; justify-content: center; pointer-events: auto; }
+  .btn-primary {
+    background: var(--white); color: var(--black);
+    padding: 14px 32px; border: none; font-size: 14px; font-weight: 600;
+    cursor: pointer; text-decoration: none; transition: transform 0.2s, opacity 0.2s;
+  }
+  .btn-primary:hover { transform: scale(1.03); opacity: 0.9; }
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    padding: 14px 32px; border: 1px solid var(--gray-dark);
+    font-size: 14px; font-weight: 400; cursor: pointer; text-decoration: none;
+    transition: border-color 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--white); }
+
+  /* SECTIONS */
+  section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray); margin-bottom: 24px; }
+
+  /* SHOW */
+  #show { border-top: 1px solid var(--gray-dark); }
+  #show h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
+  #show p.desc { font-size: 18px; color: var(--gray); line-height: 1.6; max-width: 600px; }
+  .show-details { display: flex; gap: 48px; margin-top: 48px; }
+  .show-detail { flex: 1; }
+  .show-detail h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .show-detail p { font-size: 15px; color: var(--gray); line-height: 1.5; }
+
+  /* CONFERENCE */
+  #conference { border-top: 1px solid var(--gray-dark); text-align: center; }
+  #conference h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
+  #conference .conf-date { font-size: 20px; color: var(--gray); margin-bottom: 12px; }
+  #conference .conf-desc { font-size: 16px; color: var(--gray); line-height: 1.6; max-width: 600px; margin: 0 auto; }
+  .conf-tag {
+    display: inline-block; margin-top: 32px;
+    border: 1px solid var(--gray-dark); padding: 10px 24px;
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray);
+  }
+
+  /* BUILDERS */
+  #builders { border-top: 1px solid var(--gray-dark); }
+  #builders h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; margin-bottom: 8px; }
+  .builder-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px; background: var(--gray-dark); margin-top: 48px;
+  }
+  .builder-item {
+    background: var(--black); padding: 32px 24px; text-align: center;
+    font-size: 16px; font-weight: 400; color: var(--gray); transition: color 0.3s;
+  }
+  .builder-item:hover { color: var(--white); }
+
+  /* THESIS */
+  #thesis { border-top: 1px solid var(--gray-dark); text-align: center; }
+  #thesis blockquote {
+    font-size: clamp(22px, 3vw, 36px); font-weight: 300; line-height: 1.4;
+    max-width: 800px; margin: 0 auto; color: var(--white);
+  }
+
+  /* CTA */
+  #cta { border-top: 1px solid var(--gray-dark); text-align: center; padding: 160px 48px; }
+  #cta h2 { font-size: clamp(32px, 5vw, 64px); font-weight: 700; margin-bottom: 32px; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--gray-dark); padding: 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+  footer span { color: var(--gray); font-size: 13px; }
+  footer .socials { display: flex; align-items: center; gap: 24px; }
+  footer .socials a { color: var(--gray); text-decoration: none; font-size: 13px; transition: color 0.3s; display: inline-flex; align-items: center; }
+  footer .socials a:hover { color: var(--white); }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    .show-details { flex-direction: column; gap: 24px; }
+    .builder-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    footer .socials a { margin: 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="osm-logo-horizontal.png" alt="OpenSource Media" style="height: 28px; filter: brightness(10);"></a>
+  <div class="nav-links">
+    <a href="#podcast">Podcast</a>
+    <a href="#conference">Conference</a>
+    <a href="#builders">Builders</a>
+    <a href="https://x.com/opensourcexyz" target="_blank">𝕏</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div id="canvas-container"></div>
+  <div class="hero-content">
+    <h1><span>OpenSource</span><span>Media</span></h1>
+    <p class="hero-tagline">The town square for builders of the open economy</p>
+    <div class="hero-ctas">
+      <a href="https://x.com/opensourcexyz" class="btn-primary" target="_blank">Follow on 𝕏</a>
+    </div>
+  </div>
+</section>
+
+<section id="podcast" class="reveal">
+  <p class="section-label">The Podcast</p>
+  <h2>Builders of the<br>Open Economy</h2>
+  <p class="desc">A weekly live forum where founders, researchers, and operators debate the ideas shaping AI, crypto, and open systems</p>
+  <div class="show-details">
+    <div class="show-detail">
+      <h3>Format</h3>
+      <p>60 minutes<br>3–4 builders<br>Live streamed on X</p>
+    </div>
+    <div class="show-detail">
+      <h3>Topics</h3>
+      <p>DeFi infrastructure, AI agents, tokenized economies, open-source protocols, builder culture</p>
+    </div>
+    <div class="show-detail">
+      <h3>Schedule</h3>
+      <p>Weekly</p>
+    </div>
+  </div>
+</section>
+
+<section id="conference" class="reveal">
+  <p class="section-label">Summer 2026</p>
+  <h2>OSM Virtual Conference</h2>
+  <p class="conf-date">August 2026 · 5 Days · 30+ Speakers</p>
+  <p class="conf-desc">Five days of panels, workshops, and conversations with the builders shaping the open economy</p>
+  <span class="conf-tag">Details coming soon</span>
+</section>
+
+<section id="builders" class="reveal">
+  <p class="section-label">Builder Network</p>
+  <h2>Featuring builders from<br>across the open economy</h2>
+  <div class="builder-grid">
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+    <div class="builder-item">Coming Soon</div>
+  </div>
+</section>
+
+<section id="thesis" class="reveal">
+  <p class="section-label">Why</p>
+  <blockquote>The open economy is being built in real time. We connect the builders, ideas, and systems shaping it</blockquote>
+</section>
+
+<section id="cta" class="reveal">
+  <h2>Follow the signal.</h2>
+  <div class="hero-ctas">
+    <a href="https://x.com/opensourcexyz" class="btn-primary" target="_blank">Follow on 𝕏</a>
+    <a href="mailto:hello@opensourcemedia.xyz" class="btn-secondary">Sponsor Inquiry</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 OpenSource Media</span>
+  <div class="socials">
+    <a href="https://x.com/opensourcexyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a href="https://www.youtube.com/@opensourcemediaxyz" target="_blank" style="display:inline-flex;align-items:center;"><svg width="24" height="17" viewBox="0 0 24 17" fill="currentColor"><path d="M23.5 2.5C23.2 1.4 22.3.5 21.2.2 19.3 0 12 0 12 0S4.7 0 2.8.2C1.7.5.8 1.4.5 2.5.2 4.4 0 8.5 0 8.5s.2 4.1.5 6c.3 1.1 1.2 2 2.3 2.3C4.7 17 12 17 12 17s7.3 0 9.2-.2c1.1-.3 2-1.2 2.3-2.3.3-1.9.5-6 .5-6s-.2-4.1-.5-6zM9.6 12.1V4.9l6.2 3.6-6.2 3.6z"/></svg></a>
+  </div>
+</footer>
+
+<!-- Three.js Chrome Sculpture — Studio HDRI Style -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x070707);
+
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+container.appendChild(renderer.domElement);
+
+// Create custom studio environment
+const pmrem = new THREE.PMREMGenerator(renderer);
+
+// Build a dark studio scene with bright panels for reflections
+const studioScene = new THREE.Scene();
+studioScene.background = new THREE.Color(0x000000);
+
+// Key light panel (upper-left)
+const keyGeo = new THREE.PlaneGeometry(4, 2);
+const keyMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+const keyLight = new THREE.Mesh(keyGeo, keyMat);
+keyLight.position.set(-3, 4, 3);
+keyLight.lookAt(0, 0, 0);
+studioScene.add(keyLight);
+
+// Fill light panel (right, dimmer)
+const fillGeo = new THREE.PlaneGeometry(3, 1.5);
+const fillMat = new THREE.MeshBasicMaterial({ color: 0x888888, side: THREE.DoubleSide });
+const fillLight = new THREE.Mesh(fillGeo, fillMat);
+fillLight.position.set(4, 1, 2);
+fillLight.lookAt(0, 0, 0);
+studioScene.add(fillLight);
+
+// Subtle bottom bounce
+const bounceGeo = new THREE.PlaneGeometry(6, 3);
+const bounceMat = new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.DoubleSide });
+const bounceLight = new THREE.Mesh(bounceGeo, bounceMat);
+bounceLight.position.set(0, -3, 1);
+bounceLight.lookAt(0, 0, 0);
+studioScene.add(bounceLight);
+
+// Small hot spot (rim accent)
+const rimGeo = new THREE.PlaneGeometry(1, 0.5);
+const rimMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+const rimLight = new THREE.Mesh(rimGeo, rimMat);
+rimLight.position.set(-1, 2, -4);
+rimLight.lookAt(0, 0, 0);
+studioScene.add(rimLight);
+
+const envMap = pmrem.fromScene(studioScene, 0.04).texture;
+scene.environment = envMap;
+
+// Chrome material — neutral, achromatic, mirror-like
+const material = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  metalness: 1.0,
+  roughness: 0.02,
+  envMap: envMap,
+  envMapIntensity: 1.3,
+  clearcoat: 0.0,
+  reflectivity: 1.0,
+});
+
+// Torus knot sculpture
+const geometry = new THREE.TorusKnotGeometry(1.2, 0.38, 256, 64, 2, 3);
+const mesh = new THREE.Mesh(geometry, material);
+mesh.scale.set(0.85, 0.85, 0.85);
+scene.add(mesh);
+
+// Mouse interaction
+let mouseX = 0, mouseY = 0;
+let targetRotX = 0, targetRotY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animation
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Slow base rotation
+  targetRotX = mouseY * 0.3;
+  targetRotY = performance.now() * 0.0002 + mouseX * 0.3;
+
+  mesh.rotation.x += (targetRotX - mesh.rotation.x) * 0.02;
+  mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.02;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
